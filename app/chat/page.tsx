@@ -17,7 +17,7 @@ export default function ChatPage() {
   };
 
   return (
-    <main className="max-w-xl mx-auto p-4 space-y-4">
+    <main className="max-w-xl mx-auto p-4 space-y-4 w-full h-full">
       <h1 className="text-2xl font-bold">Just Chat</h1>
       <MessageList messages={messages} />
       <ChatInputBox onSend={sendMessage} />
