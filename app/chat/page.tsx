@@ -5,10 +5,9 @@ import MessageList from "@/components/MessageList";
 import { useState, useEffect } from "react";
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<
-    { name: string; text: string; id: number }[]
-  >([]);
-  console.log("🚀 ~ ChatPage ~ messages:", messages);
+  const [messages, setMessages] = useState<{ name: string; text: string }[]>(
+    []
+  );
 
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
@@ -16,21 +15,34 @@ export default function ChatPage() {
 
   // Load messages from localStorage on load
   useEffect(() => {
-    const saved = localStorage.getItem("messages");
-    if (saved) {
-      setMessages(JSON.parse(saved));
+    async function fetchData() {
+      const res = await fetch("/api/message", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        console.error("Failed to send message");
+        return;
+      }
+      const allChatsData = await res.json();
+
+      setMessages(allChatsData);
+      console.log("🚀 ~ useEffect ~ getAllChat:", allChatsData);
     }
 
-    // Listen for messages from other tabs
-    const onStorageChange = (e: StorageEvent) => {
-      if (e.key === "messages") {
-        const updated = JSON.parse(e.newValue || "[]");
-        setMessages(updated);
-      }
-    };
-    window.addEventListener("storage", onStorageChange);
+    fetchData();
 
-    return () => window.removeEventListener("storage", onStorageChange);
+    // const onStorageChange = (e: StorageEvent) => {
+    //   if (e.key === "messages") {
+    //     const updated = JSON.parse(e.newValue || "[]");
+    //     setMessages(updated);
+    //   }
+    // };
+    // window.addEventListener("storage", onStorageChange);
+
+    // return () => window.removeEventListener("storage", onStorageChange);
   }, []);
 
   const joinChat = (username: string) => {
@@ -39,18 +51,51 @@ export default function ChatPage() {
     setJoined(true);
   };
 
-  const sendMessage = (text: string) => {
+  //   const sendMessage = async (text: string) => {
+  //   if (!text.trim()) return;
+
+  //   const newMessage = { name, text };
+
+  //   const res = await fetch("/api/messages", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(newMessage),
+  //   });
+
+  //   if (!res.ok) {
+  //     console.error("Failed to send message");
+  //     return;
+  //   }
+
+  //   const savedMessage = await res.json();
+  //   setMessages((prev) => [...prev, savedMessage]);
+  // };
+
+  const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
     const newMessage = {
       name,
       text,
-      id: Date.now(), // Use timestamp as ID
     };
+    const res = await fetch("/api/message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMessage),
+    });
+    if (!res.ok) {
+      console.error("Failed to send message");
+      return;
+    }
 
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    localStorage.setItem("messages", JSON.stringify(updatedMessages));
+    const savedMessage = await res.json();
+    console.log("🚀 ~ sendMessage ~ savedMessage:", savedMessage);
+    setMessages((prev) => [...prev, savedMessage.message]);
+    // localStorage.setItem("messages", JSON.stringify(updatedMessages));
   };
 
   if (!joined) {
