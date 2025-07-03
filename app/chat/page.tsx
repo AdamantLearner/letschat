@@ -2,13 +2,14 @@
 
 import ChatInputBox from "@/components/ChatInputBox";
 import MessageList from "@/components/MessageList";
-import { useState, useEffect } from "react";
+import { UserContext } from "@/context/user-context";
+import { useState, useEffect, useContext } from "react";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<{ name: string; text: string }[]>(
     []
   );
-
+  const user = useContext(UserContext);
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
   // const [messageId, setMessageId] = useState(Date.now());
@@ -50,7 +51,12 @@ export default function ChatPage() {
     setName(username);
     setJoined(true);
   };
-
+  useEffect(() => {
+    if (user && user.name) {
+      setName(user.name);
+      setJoined(true);
+    }
+  }, [user]);
   //   const sendMessage = async (text: string) => {
   //   if (!text.trim()) return;
 
