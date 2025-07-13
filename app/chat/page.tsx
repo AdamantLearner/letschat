@@ -13,8 +13,14 @@ export default function ChatPage() {
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
   // const [messageId, setMessageId] = useState(Date.now());
+  useEffect(() => {
+    const storedName = localStorage.getItem("chatUserName");
+    if (storedName) {
+      setName(storedName);
+      setJoined(true);
+    }
+  }, [user]);
 
-  // Load messages from localStorage on load
   useEffect(() => {
     async function fetchData() {
       const res = await fetch("/api/message", {
@@ -30,11 +36,10 @@ export default function ChatPage() {
       const allChatsData = await res.json();
 
       setMessages(allChatsData);
-      console.log("🚀 ~ useEffect ~ getAllChat:", allChatsData);
     }
 
     fetchData();
-
+    // Load messages from localStorage on load
     // const onStorageChange = (e: StorageEvent) => {
     //   if (e.key === "messages") {
     //     const updated = JSON.parse(e.newValue || "[]");
@@ -50,13 +55,8 @@ export default function ChatPage() {
     if (!username.trim()) return;
     setName(username);
     setJoined(true);
+    localStorage.setItem("chatUserName", username); // Save to localStorage
   };
-  useEffect(() => {
-    if (user && user.name) {
-      setName(user.name);
-      setJoined(true);
-    }
-  }, [user]);
   //   const sendMessage = async (text: string) => {
   //   if (!text.trim()) return;
 
@@ -99,7 +99,7 @@ export default function ChatPage() {
     }
 
     const savedMessage = await res.json();
-    console.log("🚀 ~ sendMessage ~ savedMessage:", savedMessage);
+    //api returns the saved message and that is appended to the messages state
     setMessages((prev) => [...prev, savedMessage.message]);
     // localStorage.setItem("messages", JSON.stringify(updatedMessages));
   };
