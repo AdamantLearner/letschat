@@ -106,26 +106,41 @@ export default function ChatPage() {
 
   if (!joined) {
     return (
-      <div className="max-w-xl mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Join Chat</h1>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          className="border p-2 rounded"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              joinChat(e.currentTarget.value);
-            }
-          }}
-        />
+      <div className="flex flex-col items-center justify-center h-screen bg-blue-100">
+        <div className="max-w-xl mx-auto p-4 border rounded-3xl bg-fuchsia-900 p-5 ">
+          <h1 className="text-2xl font-bold mb-4 text-white ">Join Chat</h1>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            className="border p-2 rounded text-white"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                joinChat(e.currentTarget.value);
+              }
+            }}
+          />
+        </div>
       </div>
     );
   }
 
   return (
     <main className="max-w-xl mx-auto p-4 space-y-4 w-full h-full bg-blue-100">
-      <h1 className="text-2xl font-bold bg-blue-300 rounded px-2">Just Chat</h1>
-      <div className="text-sm">Chatting as: {name}</div>
+      <h1 className="text-2xl font-bold bg-blue-300 rounded-3xl w-fit  px-4">
+        Just Chat
+      </h1>
+      <div className="flex justify-between items-center ">
+        <div className="text-sm">Chatting as: {name}</div>
+        <button
+          onClick={() => {
+            localStorage.removeItem("chatUserName");
+            setName("");
+            setJoined(false);
+          }}
+          className="text-red-800 transition-transform duration-150 active:scale-95 cursor-pointer hover:bg-red-100 rounded-2xl px-2 py-1 rounded">
+          Logout
+        </button>
+      </div>
       <MessageList messages={messages} currentUser={name} />
       <ChatInputBox onSend={sendMessage} />
     </main>

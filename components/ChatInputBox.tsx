@@ -30,7 +30,7 @@ export default function ChatBox({ onSend }: ChatBoxProps) {
       />
       <button
         onClick={handleSubmit}
-        className="bg-blue-600 text-white px-4 py-2 rounded">
+        className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded">
         Send
       </button>
     </div>
