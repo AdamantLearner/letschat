@@ -123,10 +123,10 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="max-w-xl mx-auto p-4 space-y-4 w-full h-full">
-      <h1 className="text-2xl font-bold">Just Chat</h1>
+    <main className="max-w-xl mx-auto p-4 space-y-4 w-full h-full bg-blue-100">
+      <h1 className="text-2xl font-bold bg-blue-300 rounded px-2">Just Chat</h1>
       <div className="text-sm">Chatting as: {name}</div>
-      <MessageList messages={messages} />
+      <MessageList messages={messages} currentUser={name} />
       <ChatInputBox onSend={sendMessage} />
     </main>
   );

@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 
 type Props = {
   messages: { name: string; text: string }[];
+  currentUser: string;
 };
 
-export default function MessageList({ messages }: Props) {
+export default function MessageList({ messages, currentUser }: Props) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -17,13 +18,17 @@ export default function MessageList({ messages }: Props) {
 
   return (
     <div
-      className={`space-y-2 max-h-[calc(100dvh-180px)] overflow-y-auto  ${
+      className={`space-y-2 max-h-[calc(100dvh-180px)] overflow-y-auto hide-scrollbar  ${
         messages.length > 0 && "border"
       } p-2 rounded`}>
       {messages.map((msg, i) => (
-        <div key={i} className="p-2 bg-gray-100 rounded text-black">
+        <div
+          key={i}
+          className={`p-2 bg-gray-100 rounded text-black w-fit ${
+            msg.name === currentUser ? "ml-auto bg-blue-200" : "mr-auto"
+          }`}>
           <p>
-            <strong className="">{msg.name}:</strong> {msg.text}
+            <strong>{msg.name}:</strong> {msg.text}
           </p>
         </div>
       ))}
