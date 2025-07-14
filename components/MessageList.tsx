@@ -18,7 +18,7 @@ export default function MessageList({ messages, currentUser }: Props) {
 
   return (
     <div
-      className={`space-y-2 max-h-[calc(100dvh-180px)] overflow-y-auto hide-scrollbar  ${
+      className={`space-y-2 h-[calc(100dvh-180px)] md:h-auto md:max-h-[calc(100dvh-230px)] overflow-y-auto hide-scrollbar  ${
         messages.length > 0 && "border"
       } p-2 rounded`}>
       {messages.map((msg, i) => (

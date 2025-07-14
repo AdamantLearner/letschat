@@ -125,24 +125,26 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="max-w-xl mx-auto p-4 space-y-4 w-full h-full bg-blue-100">
-      <h1 className="text-2xl font-bold bg-blue-300 rounded-3xl w-fit  px-4">
-        Just Chat
-      </h1>
-      <div className="flex justify-between items-center ">
-        <div className="text-sm">Chatting as: {name}</div>
-        <button
-          onClick={() => {
-            localStorage.removeItem("chatUserName");
-            setName("");
-            setJoined(false);
-          }}
-          className="text-red-800 transition-transform duration-150 active:scale-95 cursor-pointer hover:bg-red-100 rounded-2xl px-2 py-1 rounded">
-          Logout
-        </button>
+    <main className="max-w-xl mx-auto m  my-0 md:my-5 space-y-4 w-full h-full ">
+      <div className="p-4 bg-blue-100 rounded-3xl shadow-md space-y-4">
+        <h1 className="text-2xl font-bold bg-blue-300 rounded-3xl w-fit  px-4">
+          Just Chat
+        </h1>
+        <div className="flex justify-between items-center ">
+          <div className="text-sm">Chatting as: {name}</div>
+          <button
+            onClick={() => {
+              localStorage.removeItem("chatUserName");
+              setName("");
+              setJoined(false);
+            }}
+            className="text-red-800 font-semibold text-sm transition-transform duration-150 active:scale-95 cursor-pointer hover:bg-red-100 rounded-2xl px-2 py-1 rounded">
+            Logout
+          </button>
+        </div>
+        <MessageList messages={messages} currentUser={name} />
+        <ChatInputBox onSend={sendMessage} />
       </div>
-      <MessageList messages={messages} currentUser={name} />
-      <ChatInputBox onSend={sendMessage} />
     </main>
   );
 }
